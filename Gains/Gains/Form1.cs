@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gains
@@ -16,6 +10,7 @@ namespace Gains
         private readonly GainService _gainService;
         private readonly VonNeumanService _neumanService;
         private readonly InclusionService _inclusionService;
+        private readonly PropabilityService _propabilityService;
         private Cell[,] _cellStateTable;
         private Bitmap _bitmap;
         private readonly Random _random = new Random();
@@ -27,32 +22,62 @@ namespace Gains
             _colorService = new ColorService();
             _neumanService = new VonNeumanService();
             _inclusionService = new InclusionService();
+            _propabilityService = new PropabilityService();
             InitializeComponent();
             InclusionType.Items.Add("Square");
             InclusionType.Items.Add("Circle");
+            NeighberhoodType.Items.Add("VonNeuman");
+            NeighberhoodType.Items.Add("Propability");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
+            var propability = 10;
             var z = 0;
-            while (z < 100)
+
+            if (NeighberhoodType.Text == "VonNeuman")
             {
-                for (int i = 0; i < sizeX; i++)
+                while (z < 100)
                 {
-                    for (int j = 0; j < sizeY; j++)
+                    for (int i = 0; i < sizeX; i++)
                     {
-                        _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
+                        for (int j = 0; j < sizeY; j++)
+                        {
+                            _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
+                        }
                     }
+                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    pictureBox1.Image = _bitmap;
+                    pictureBox1.Show();
+                    pictureBox1.Update();
+                    _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, sizeX, sizeY);
+                    z++;
                 }
-                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
-                pictureBox1.Image = _bitmap;
-                pictureBox1.Show();
-                pictureBox1.Update();
-                _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, sizeX, sizeY);
-                z++;
             }
+
+            if (NeighberhoodType.Text == "Propability")
+            {
+                while (z < 100)
+                {
+                    for (int i = 0; i < sizeX; i++)
+                    {
+                        for (int j = 0; j < sizeY; j++)
+                        {
+                            _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability);
+                        }
+                    }
+                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    pictureBox1.Image = _bitmap;
+                    pictureBox1.Show();
+                    pictureBox1.Update();
+                    _cellStateTable = RemoveUpdateLockOnCellsPropability(_cellStateTable, sizeX, sizeY);
+                    z++;
+                }
+            }
+
+
         }
 
         private Cell[,] InitCellTable(int sizeX, int sizeY)
@@ -102,6 +127,20 @@ namespace Gains
                 for (int j = 0; j < y; j++)
                 {
                     cells[i, j].IsUpdated = false;
+                }
+            }
+            return cells;
+        }
+        private Cell[,] RemoveUpdateLockOnCellsPropability(Cell[,] cells, int x, int y)
+        {
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    if (cells[i, j].CellColor == Color.White)
+                        cells[i, j].IsUpdated = false;
+
+                    cells[i, j].IsLocked = false;
                 }
             }
             return cells;

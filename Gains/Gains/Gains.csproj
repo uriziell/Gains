@@ -56,7 +56,9 @@
     </Compile>
     <Compile Include="Cell.cs" />
     <Compile Include="InclusionService.cs" />
+    <Compile Include="NeighborhoodService.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="PropabilityService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VonNeumanService.cs" />
     <EmbeddedResource Include="Form1.resx">

@@ -30,8 +30,6 @@
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.NumberOfGains = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SizeX = new System.Windows.Forms.TextBox();
@@ -48,6 +46,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.AddInclusionsAfterSimulation = new System.Windows.Forms.Button();
+            this.NeighberhoodType = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.Probability = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,26 +70,6 @@
             this.button1.Text = "Draw";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(429, 68);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(87, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "von Neuman";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(429, 92);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(56, 17);
-            this.checkBox2.TabIndex = 3;
-            this.checkBox2.Text = "Moore";
-            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // NumberOfGains
             // 
@@ -226,11 +208,48 @@
             this.AddInclusionsAfterSimulation.UseVisualStyleBackColor = true;
             this.AddInclusionsAfterSimulation.Click += new System.EventHandler(this.AddInclusionsAfterSimulation_Click);
             // 
+            // NeighberhoodType
+            // 
+            this.NeighberhoodType.FormattingEnabled = true;
+            this.NeighberhoodType.Location = new System.Drawing.Point(429, 89);
+            this.NeighberhoodType.Name = "NeighberhoodType";
+            this.NeighberhoodType.Size = new System.Drawing.Size(121, 21);
+            this.NeighberhoodType.TabIndex = 22;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(556, 92);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(89, 13);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "Neiberhood Type";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(700, 119);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(55, 13);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "Probability";
+            // 
+            // Probability
+            // 
+            this.Probability.Location = new System.Drawing.Point(626, 116);
+            this.Probability.Name = "Probability";
+            this.Probability.Size = new System.Drawing.Size(67, 20);
+            this.Probability.TabIndex = 26;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.Probability);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.NeighberhoodType);
             this.Controls.Add(this.AddInclusionsAfterSimulation);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -247,8 +266,6 @@
             this.Controls.Add(this.SizeX);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.NumberOfGains);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
@@ -263,8 +280,6 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TextBox NumberOfGains;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox SizeX;
@@ -281,6 +296,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button AddInclusionsAfterSimulation;
+        private System.Windows.Forms.ComboBox NeighberhoodType;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox Probability;
     }
 }
 

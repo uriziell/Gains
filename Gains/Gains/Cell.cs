@@ -8,6 +8,7 @@ namespace Gains
         public bool IsUpdated { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
+        public bool IsLocked { get; set; }
 
         //public Cell()
         //{

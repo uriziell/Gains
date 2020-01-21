@@ -38,7 +38,8 @@ namespace Gains
                 var randomY = r.Next(bitmap.Size.Height);
                 bitmap.SetPixel(randomX, randomY, gain.CellColor);
                 tabCells[randomX, randomY].CellColor = gain.CellColor;
-                tabCells[randomX, randomY].IsUpdated = false;
+                tabCells[randomX, randomY].IsUpdated = true;
+                tabCells[randomX, randomY].IsLocked = false;
             }
             return bitmap;
         }
