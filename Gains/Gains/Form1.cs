@@ -216,5 +216,70 @@ namespace Gains
             pictureBox1.Show();
             pictureBox1.Update();
         }
+
+        private void CleanUp_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    _cellStateTable[i, j].CellColor = Color.White;
+                    _cellStateTable[i, j].IsUpdated = false;
+                    _cellStateTable[i, j].IsLocked = false;
+                }
+            }
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
+
+        private void SetBou_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+            var inclusionSize = int.Parse(InclusionSize.Text);
+
+            if (_cellStateTable == null)
+                _cellStateTable = InitCellTable(sizeX, sizeY);
+
+            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+
+            var type = InclusionType.Text;
+
+            var inclusions =
+                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable, sizeX, sizeY);
+
+            _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
+
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
+
+        private void CleanUpWithoutBoundaries_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    if (_cellStateTable[i, j].CellColor == Color.Black) continue;
+                    _cellStateTable[i, j].CellColor = Color.White;
+                    _cellStateTable[i, j].IsUpdated = false;
+                    _cellStateTable[i, j].IsLocked = false;
+                }
+            }
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
     }
 }

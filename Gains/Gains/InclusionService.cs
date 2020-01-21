@@ -53,10 +53,9 @@ namespace Gains
             return cellStateTable;
         }
 
-        public List<Cell> GetInclusionsAfterSimulation(Cell[,] cellStateTable, int inclusionsAmount, int sizeX, int sizeY)
+        public List<Cell> GetInclusionsAfterSimulation(Cell[,] cellStateTable, int sizeX, int sizeY, int inclusionsAmount = 0)
         {
             var allInclusions = new List<Cell>();
-            var inclusions = new List<Cell>();
             for (int i = 0; i < sizeX; i++)
             {
                 for (int j = 0; j < sizeY; j++)
@@ -70,6 +69,10 @@ namespace Gains
                 }
             }
 
+            if (inclusionsAmount == 0)
+                return allInclusions;
+
+            var inclusions = new List<Cell>();
             for (int i = 0; i < inclusionsAmount; i++)
             {
                 lock (SyncLock)
