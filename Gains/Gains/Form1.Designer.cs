@@ -28,13 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.NumberOfGains = new System.Windows.Forms.TextBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.SizeX = new System.Windows.Forms.TextBox();
             this.SizeY = new System.Windows.Forms.TextBox();
@@ -42,6 +40,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.GenerateSpace = new System.Windows.Forms.Button();
             this.AddGains = new System.Windows.Forms.Button();
+            this.NumberOfInclusions = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.AddInclusions = new System.Windows.Forms.Button();
+            this.InclusionType = new System.Windows.Forms.ComboBox();
+            this.InclusionSize = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.AddInclusionsAfterSimulation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,11 +95,6 @@
             this.NumberOfGains.Name = "NumberOfGains";
             this.NumberOfGains.Size = new System.Drawing.Size(56, 20);
             this.NumberOfGains.TabIndex = 4;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // label1
             // 
@@ -156,11 +157,88 @@
             this.AddGains.UseVisualStyleBackColor = true;
             this.AddGains.Click += new System.EventHandler(this.AddGains_Click);
             // 
+            // NumberOfInclusions
+            // 
+            this.NumberOfInclusions.Location = new System.Drawing.Point(429, 261);
+            this.NumberOfInclusions.Name = "NumberOfInclusions";
+            this.NumberOfInclusions.Size = new System.Drawing.Size(56, 20);
+            this.NumberOfInclusions.TabIndex = 13;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(491, 264);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(102, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "NumberOfInclusions";
+            // 
+            // AddInclusions
+            // 
+            this.AddInclusions.Location = new System.Drawing.Point(429, 339);
+            this.AddInclusions.Name = "AddInclusions";
+            this.AddInclusions.Size = new System.Drawing.Size(86, 23);
+            this.AddInclusions.TabIndex = 15;
+            this.AddInclusions.Text = "AddInclusions";
+            this.AddInclusions.UseVisualStyleBackColor = true;
+            this.AddInclusions.Click += new System.EventHandler(this.AddInclusions_Click);
+            // 
+            // InclusionType
+            // 
+            this.InclusionType.FormattingEnabled = true;
+            this.InclusionType.Location = new System.Drawing.Point(429, 312);
+            this.InclusionType.Name = "InclusionType";
+            this.InclusionType.Size = new System.Drawing.Size(121, 21);
+            this.InclusionType.TabIndex = 16;
+            // 
+            // InclusionSize
+            // 
+            this.InclusionSize.Location = new System.Drawing.Point(429, 288);
+            this.InclusionSize.Name = "InclusionSize";
+            this.InclusionSize.Size = new System.Drawing.Size(56, 20);
+            this.InclusionSize.TabIndex = 17;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(0, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "label5";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(492, 288);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Inclusion Size";
+            // 
+            // AddInclusionsAfterSimulation
+            // 
+            this.AddInclusionsAfterSimulation.Location = new System.Drawing.Point(521, 339);
+            this.AddInclusionsAfterSimulation.Name = "AddInclusionsAfterSimulation";
+            this.AddInclusionsAfterSimulation.Size = new System.Drawing.Size(173, 23);
+            this.AddInclusionsAfterSimulation.TabIndex = 20;
+            this.AddInclusionsAfterSimulation.Text = "Add Inclusions After Simulation";
+            this.AddInclusionsAfterSimulation.UseVisualStyleBackColor = true;
+            this.AddInclusionsAfterSimulation.Click += new System.EventHandler(this.AddInclusionsAfterSimulation_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.AddInclusionsAfterSimulation);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.InclusionSize);
+            this.Controls.Add(this.InclusionType);
+            this.Controls.Add(this.AddInclusions);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.NumberOfInclusions);
             this.Controls.Add(this.AddGains);
             this.Controls.Add(this.GenerateSpace);
             this.Controls.Add(this.label3);
@@ -188,7 +266,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.TextBox NumberOfGains;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox SizeX;
         private System.Windows.Forms.TextBox SizeY;
@@ -196,6 +273,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button GenerateSpace;
         private System.Windows.Forms.Button AddGains;
+        private System.Windows.Forms.TextBox NumberOfInclusions;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button AddInclusions;
+        private System.Windows.Forms.ComboBox InclusionType;
+        private System.Windows.Forms.TextBox InclusionSize;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button AddInclusionsAfterSimulation;
     }
 }
 

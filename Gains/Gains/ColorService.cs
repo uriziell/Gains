@@ -52,5 +52,10 @@ namespace Gains
                 default: return Color.Red;
             }
         }
+
+        public Color GetBlackColor()
+        {
+            return Color.Black;
+        }
     }
 }

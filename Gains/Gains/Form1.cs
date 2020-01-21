@@ -15,15 +15,21 @@ namespace Gains
         private readonly ColorService _colorService;
         private readonly GainService _gainService;
         private readonly VonNeumanService _neumanService;
+        private readonly InclusionService _inclusionService;
         private Cell[,] _cellStateTable;
         private Bitmap _bitmap;
+        private readonly Random _random = new Random();
+        private static readonly object SyncLock = new object();
 
         public Form1()
         {
             _gainService = new GainService();
             _colorService = new ColorService();
             _neumanService = new VonNeumanService();
+            _inclusionService = new InclusionService();
             InitializeComponent();
+            InclusionType.Items.Add("Square");
+            InclusionType.Items.Add("Circle");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -67,11 +73,11 @@ namespace Gains
         {
             var bitmap = new Bitmap(sizeX, sizeY);
 
-            for (var i = 0; i < bitmap.Height; i++)
+            for (var i = 1; i < bitmap.Height - 1; i++)
             {
-                for (var j = 0; j < bitmap.Width; j++)
+                for (var j = 1; j < bitmap.Width - 1; j++)
                 {
-                    bitmap.SetPixel(i, j, cellArray[i, j].CellColor);
+                    bitmap.SetPixel(j, i, cellArray[j, i].CellColor);
                 }
             }
 
@@ -83,7 +89,7 @@ namespace Gains
             {
                 for (var j = 0; j < bitmap.Width; j++)
                 {
-                    bitmap.SetPixel(i, j, cellArray[i, j].CellColor);
+                    bitmap.SetPixel(j, i, cellArray[j, i].CellColor);
                 }
             }
             return bitmap;
@@ -117,6 +123,56 @@ namespace Gains
             _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
+
+        private void AddInclusions_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+            var inclusionsAmount = int.Parse(InclusionSize.Text);
+            var inclusionSize = int.Parse(InclusionSize.Text);
+
+            if (_cellStateTable == null)
+                _cellStateTable = InitCellTable(sizeX, sizeY);
+
+            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+
+            var type = InclusionType.Text;
+
+            for (int i = 0; i < inclusionsAmount; i++)
+            {
+                _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusionSize, type, sizeX, sizeY);
+            }
+
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
+
+        private void AddInclusionsAfterSimulation_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+            var inclusionsAmount = int.Parse(InclusionSize.Text);
+            var inclusionSize = int.Parse(InclusionSize.Text);
+
+            if (_cellStateTable == null)
+                _cellStateTable = InitCellTable(sizeX, sizeY);
+
+            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+
+            var type = InclusionType.Text;
+
+            var inclusions =
+                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable, inclusionsAmount, sizeX, sizeY);
+
+            _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
+
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
