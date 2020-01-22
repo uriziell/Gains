@@ -10,20 +10,29 @@ namespace Gains
     public class GainService
     {
         private readonly ColorService _colorService;
+        private readonly Random _random;
+        private readonly object _syncLock;
 
         public GainService()
         {
             _colorService = new ColorService();
+            _random = new Random();
+            _syncLock = new object();
         }
         public List<Cell> CreateGain(int numberOfGains)
         {
             var gains = new List<Cell>();
-
             for (var i = 0; i < numberOfGains; i++)
             {
+                var id = 0;
+                lock (_syncLock)
+                {
+                    id = _random.Next();
+                }
                 gains.Add(new Cell
                 {
-                    CellColor = _colorService.GetRandomColor()
+                    CellColor = _colorService.GetRandomColor(),
+                    Id = id
                 });
             }
 
@@ -40,6 +49,7 @@ namespace Gains
                 tabCells[randomX, randomY].CellColor = gain.CellColor;
                 tabCells[randomX, randomY].IsUpdated = true;
                 tabCells[randomX, randomY].IsLocked = false;
+                tabCells[randomX, randomY].Id = gain.Id;
             }
             return bitmap;
         }

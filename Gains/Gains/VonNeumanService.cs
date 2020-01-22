@@ -19,6 +19,7 @@ namespace Gains
             {
                 cells[positionX - 1, positionY].CellColor = color;
                 cells[positionX - 1, positionY].IsUpdated = true;
+                cells[positionX - 1, positionY].Id = cells[positionX, positionY].Id;
             }
 
             if (positionX + 1 < maxRangeX && cells[positionX + 1, positionY] != null &&
@@ -27,6 +28,7 @@ namespace Gains
             {
                 cells[positionX + 1, positionY].CellColor = color;
                 cells[positionX + 1, positionY].IsUpdated = true;
+                cells[positionX + 1, positionY].Id = cells[positionX, positionY].Id;
 
             }
 
@@ -36,6 +38,7 @@ namespace Gains
             {
                 cells[positionX, positionY - 1].CellColor = color;
                 cells[positionX, positionY - 1].IsUpdated = true;
+                cells[positionX, positionY - 1].Id = cells[positionX, positionY].Id;
             }
 
             if (positionY + 1 < maxRangeY && cells[positionX, positionY + 1] != null &&
@@ -43,6 +46,7 @@ namespace Gains
                 && cells[positionX, positionY + 1].CellColor != Color.Black)
             {
                 cells[positionX, positionY + 1].CellColor = color;
+                cells[positionX, positionY + 1].Id = cells[positionX, positionY].Id;
                 cells[positionX, positionY + 1].IsUpdated = true;
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -39,8 +40,9 @@ namespace Gains
 
             if (NeighberhoodType.Text == "VonNeuman")
             {
-                while (z < 100)
+                while (!IsEnd())
                 {
+
                     for (int i = 0; i < sizeX; i++)
                     {
                         for (int j = 0; j < sizeY; j++)
@@ -59,7 +61,7 @@ namespace Gains
 
             if (NeighberhoodType.Text == "Propability")
             {
-                while (z < 100)
+                while (!IsEnd())
                 {
                     for (int i = 0; i < sizeX; i++)
                     {
@@ -76,8 +78,6 @@ namespace Gains
                     z++;
                 }
             }
-
-
         }
 
         private Cell[,] InitCellTable(int sizeX, int sizeY)
@@ -280,6 +280,65 @@ namespace Gains
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
+        }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+            var mouseEventArgs = e as MouseEventArgs;
+            var x = mouseEventArgs.X;
+            var y = mouseEventArgs.Y;
+            var id = _cellStateTable[x, y].Id;
+            var boundaries = new List<Cell>();
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    if (i - 1 < 0 || i >= sizeX - 1 || j - 1 < 0 || j + 1 >= sizeY) continue;
+                    if (_cellStateTable[i, j].Id == id && id != _cellStateTable[i + 1, j].Id ||
+                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i - 1, j].Id ||
+                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j + 1].Id ||
+                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j - 1].Id)
+                    {
+                        _cellStateTable[i, j].PositionX = i;
+                        _cellStateTable[i, j].PositionY = j;
+                        boundaries.Add(_cellStateTable[i, j]);
+                    }
+                }
+            }
+
+            var inclusionSize = int.Parse(InclusionSize.Text);
+
+            if (_cellStateTable == null)
+                _cellStateTable = InitCellTable(sizeX, sizeY);
+
+            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+
+            var type = InclusionType.Text;
+
+            _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, boundaries, inclusionSize, type, sizeX, sizeY);
+
+            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            pictureBox1.Image = _bitmap;
+            pictureBox1.Show();
+            pictureBox1.Update();
+        }
+
+        private bool IsEnd()
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+            var counter = 0;
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    if (_cellStateTable[i, j].CellColor == Color.White)
+                        counter++;
+                }
+            }
+            return counter == 0;
         }
     }
 }

@@ -24,25 +24,31 @@ namespace Gains
             if (cells[positionX, positionY].IsUpdated) return cells;
             if (_neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).Count >= 5)
             {
-                var col = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY)[0]
-                    .CellColor;
-                cells[positionX, positionY].CellColor = col;
+                var cell = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).GroupBy(x => x.CellColor).First().ToList()[0];
+                var color = cell.CellColor;
+                var id = cell.Id;
+                cells[positionX, positionY].Id = id;
+                cells[positionX, positionY].CellColor = color;
                 cells[positionX, positionY].IsUpdated = true;
                 cells[positionX, positionY].IsLocked = true;
             }
             else if (_neighborhoodService.GetVonNeumanNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).Count >= 3)
             {
-                var col = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY)
-                    .GroupBy(x => x.CellColor).First().Key;
-                cells[positionX, positionY].CellColor = col;
+                var cell = _neighborhoodService.GetVonNeumanNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).GroupBy(x => x.CellColor).First().ToList()[0];
+                var color = cell.CellColor;
+                var id = cell.Id;
+                cells[positionX, positionY].Id = id;
+                cells[positionX, positionY].CellColor = color;
                 cells[positionX, positionY].IsUpdated = true;
                 cells[positionX, positionY].IsLocked = true;
             }
             else if (_neighborhoodService.GetFutherMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).Count >= 3)
             {
-                var col = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY)
-                    .GroupBy(x => x.CellColor).First().Key;
-                cells[positionX, positionY].CellColor = col;
+                var cell = _neighborhoodService.GetFutherMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).GroupBy(x => x.CellColor).First().ToList()[0];
+                var color = cell.CellColor;
+                var id = cell.Id;
+                cells[positionX, positionY].Id = id;
+                cells[positionX, positionY].CellColor = color;
                 cells[positionX, positionY].IsUpdated = true;
                 cells[positionX, positionY].IsLocked = true;
             }
@@ -55,17 +61,18 @@ namespace Gains
                 }
 
                 int test = 0;
-                Color col;
+                Cell cell;
                 var neighbors = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY);
                 if (neighbors.Count > 0)
                 {
-                    col = neighbors.GroupBy(x => x.CellColor).First().Key;
+                    cell = neighbors.GroupBy(x => x.CellColor).First().ToList()[0];
 
                     if (result >= probability)
                         return cells;
-                    cells[positionX, positionY].CellColor = col;
+                    cells[positionX, positionY].CellColor = cell.CellColor;
                     cells[positionX, positionY].IsUpdated = true;
                     cells[positionX, positionY].IsLocked = true;
+                    cells[positionX, positionY].Id = cell.Id;
                 }
             }
 
