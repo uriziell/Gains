@@ -43,7 +43,6 @@
             this.AddInclusions = new System.Windows.Forms.Button();
             this.InclusionType = new System.Windows.Forms.ComboBox();
             this.InclusionSize = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.AddInclusionsAfterSimulation = new System.Windows.Forms.Button();
             this.NeighberhoodType = new System.Windows.Forms.ComboBox();
@@ -53,11 +52,11 @@
             this.CleanUp = new System.Windows.Forms.Button();
             this.SetBou = new System.Windows.Forms.Button();
             this.CleanUpWitoutBoundaries = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.MicrostructureType = new System.Windows.Forms.ComboBox();
             this.isGrainBoudariesModeActive = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.ExportTxt = new System.Windows.Forms.Button();
+            this.ImportTxt = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -189,15 +188,6 @@
             this.InclusionSize.Size = new System.Drawing.Size(56, 20);
             this.InclusionSize.TabIndex = 17;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(0, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "label5";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -280,14 +270,6 @@
             this.CleanUpWitoutBoundaries.UseVisualStyleBackColor = true;
             this.CleanUpWitoutBoundaries.Click += new System.EventHandler(this.CleanUpWithoutBoundaries_Click);
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(0, 0);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 30;
-            // 
             // MicrostructureType
             // 
             this.MicrostructureType.FormattingEnabled = true;
@@ -306,15 +288,6 @@
             this.isGrainBoudariesModeActive.Text = "Grain boundaries mode";
             this.isGrainBoudariesModeActive.UseVisualStyleBackColor = true;
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(0, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(35, 13);
-            this.label9.TabIndex = 33;
-            this.label9.Text = "label9";
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -325,16 +298,36 @@
             this.label10.Text = "Microstructure type";
             this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
+            // ExportTxt
+            // 
+            this.ExportTxt.Location = new System.Drawing.Point(13, 13);
+            this.ExportTxt.Name = "ExportTxt";
+            this.ExportTxt.Size = new System.Drawing.Size(75, 23);
+            this.ExportTxt.TabIndex = 35;
+            this.ExportTxt.Text = "Export Txt";
+            this.ExportTxt.UseVisualStyleBackColor = true;
+            this.ExportTxt.Click += new System.EventHandler(this.ExportTxt_Click);
+            // 
+            // ImportTxt
+            // 
+            this.ImportTxt.Location = new System.Drawing.Point(13, 39);
+            this.ImportTxt.Name = "ImportTxt";
+            this.ImportTxt.Size = new System.Drawing.Size(75, 23);
+            this.ImportTxt.TabIndex = 36;
+            this.ImportTxt.Text = "Import Txt";
+            this.ImportTxt.UseVisualStyleBackColor = true;
+            this.ImportTxt.Click += new System.EventHandler(this.ImportTxt_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ImportTxt);
+            this.Controls.Add(this.ExportTxt);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.isGrainBoudariesModeActive);
             this.Controls.Add(this.MicrostructureType);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.CleanUpWitoutBoundaries);
             this.Controls.Add(this.SetBou);
             this.Controls.Add(this.CleanUp);
@@ -344,7 +337,6 @@
             this.Controls.Add(this.NeighberhoodType);
             this.Controls.Add(this.AddInclusionsAfterSimulation);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.InclusionSize);
             this.Controls.Add(this.InclusionType);
             this.Controls.Add(this.AddInclusions);
@@ -385,7 +377,6 @@
         private System.Windows.Forms.Button AddInclusions;
         private System.Windows.Forms.ComboBox InclusionType;
         private System.Windows.Forms.TextBox InclusionSize;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button AddInclusionsAfterSimulation;
         private System.Windows.Forms.ComboBox NeighberhoodType;
@@ -395,11 +386,11 @@
         private System.Windows.Forms.Button CleanUp;
         private System.Windows.Forms.Button SetBou;
         private System.Windows.Forms.Button CleanUpWitoutBoundaries;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox MicrostructureType;
         private System.Windows.Forms.CheckBox isGrainBoudariesModeActive;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button ExportTxt;
+        private System.Windows.Forms.Button ImportTxt;
     }
 }
 

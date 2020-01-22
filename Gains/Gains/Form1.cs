@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Gains
@@ -17,6 +19,8 @@ namespace Gains
         private readonly Random _random = new Random();
         private static readonly object SyncLock = new object();
         private static int MicrostructureId = 0;
+        private int textImportSizeX = 0;
+        private int textImportSizeY = 0;
 
         public Form1()
         {
@@ -55,8 +59,8 @@ namespace Gains
                     {
                         for (int j = 0; j < sizeY; j++)
                         {
-                            if(!_cellStateTable[i, j].IsLocked)
-                            _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
+                            if (!_cellStateTable[i, j].IsLocked)
+                                _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
                         }
                     }
                     _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
@@ -168,7 +172,7 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-           // _cellStateTable = InitCellTable(sizeX, sizeY);
+            // _cellStateTable = InitCellTable(sizeX, sizeY);
             _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
@@ -217,7 +221,7 @@ namespace Gains
             var type = InclusionType.Text;
 
             var inclusions =
-                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable,sizeX, sizeY, inclusionsAmount);
+                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable, sizeX, sizeY, inclusionsAmount);
 
             _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
 
@@ -423,6 +427,96 @@ namespace Gains
         private void label10_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ExportTxt_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+
+            StringBuilder fileContent = new StringBuilder();
+
+            fileContent.AppendLine("Image width and height");
+            fileContent.AppendLine(String.Format("{0} {1}", sizeX, sizeY));
+            fileContent.AppendLine("ID R G B");
+
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+
+                    string linContent = String.Format("{0} {1} {2} {3}", _cellStateTable[i, j].Id, _cellStateTable[i, j].CellColor.R, _cellStateTable[i, j].CellColor.G, _cellStateTable[i, j].CellColor.B);
+                    fileContent.AppendLine(linContent);
+                }
+            }
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            dialog.ShowDialog();
+            if (dialog.CheckPathExists)
+            {
+                System.IO.File.WriteAllText(dialog.FileName, fileContent.ToString());
+            }
+        }
+
+        private void ImportTxt_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "All Files (*.*)|*.*";
+
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Multiselect = false;
+            openFileDialog.ShowDialog();
+            if (openFileDialog.CheckFileExists)
+            {
+                using (StreamReader file = new StreamReader(openFileDialog.FileName))
+                {
+                    string line;
+                    int x = 0; int y = 0; bool firstLine = true;
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        string[] lineArray = line.Split(' ');
+                        if (!Int32.TryParse(lineArray[0], out int value))
+                            continue;
+                        if (firstLine)
+                        {
+                            textImportSizeX = Convert.ToInt32(lineArray[0]);
+                            textImportSizeY = Convert.ToInt32(lineArray[1]);
+                            _cellStateTable = InitCellTable(Convert.ToInt32(lineArray[0]), Convert.ToInt32(lineArray[1]));
+                            firstLine = false;
+                            continue;
+                        }
+
+                        if (x == textImportSizeX)
+                        {
+                            x = 0;
+                            y++;
+                        }
+
+                        if (x < textImportSizeX && y < textImportSizeY)
+                        {
+                            _cellStateTable[x, y].Id = Convert.ToInt32(lineArray[0]);
+                            _cellStateTable[x, y].CellColor = Color.FromArgb(255,
+                                Convert.ToInt32(lineArray[1]),
+                                Convert.ToInt32(lineArray[2]),
+                                Convert.ToInt32(lineArray[3]));
+                            if (_cellStateTable[x, y].CellColor == System.Drawing.Color.White)
+                            {
+                                _cellStateTable[x, y].Id = 0;
+                            }
+                        }
+                        x++;
+                    }
+
+                    _bitmap = InitBitmap(textImportSizeX, textImportSizeY, _cellStateTable);
+                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    pictureBox1.Image = _bitmap;
+                    pictureBox1.Show();
+                    pictureBox1.Update();
+                    _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
+                }
+            }
         }
     }
 }
