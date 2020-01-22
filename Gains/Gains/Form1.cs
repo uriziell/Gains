@@ -18,7 +18,6 @@ namespace Gains
         private Bitmap _bitmap;
         private readonly Random _random = new Random();
         private static readonly object SyncLock = new object();
-        private static int MicrostructureId = 0;
         private List<int> NotRemovableIds;
         private int textImportSizeX = 0;
         private int textImportSizeY = 0;
@@ -53,7 +52,7 @@ namespace Gains
             var sizeY = int.Parse(SizeY.Text);
             var propability = int.Parse(Probability.Text);
             var z = 0;
-            if (MicrostructureId != 0 && MicrostructureType.Text == "DualPhase" ||
+            if (NotRemovableIds.Count != 0 && MicrostructureType.Text == "DualPhase" ||
                 MicrostructureType.Text == "Subculture")
             {
                 SetLockOnGrains(sizeX, sizeY);
@@ -89,7 +88,7 @@ namespace Gains
                     {
                         for (int j = 0; j < sizeY; j++)
                         {
-                            _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability, MicrostructureId);
+                            _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability, NotRemovableIds);
                         }
                     }
                     _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
@@ -268,7 +267,7 @@ namespace Gains
                 {
                     for (int j = 0; j < sizeY; j++)
                     {
-                        if (_cellStateTable[i, j].Id != MicrostructureId)
+                        if ( !NotRemovableIds.Contains(_cellStateTable[i, j].Id))
                             _cellStateTable[i, j].CellColor = Color.White;
                         _cellStateTable[i, j].IsUpdated = false;
                         _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
@@ -406,7 +405,6 @@ namespace Gains
             var mouseEventArgs = e as MouseEventArgs;
             var x = mouseEventArgs.X;
             var y = mouseEventArgs.Y;
-            MicrostructureId = _cellStateTable[x, y].Id;
             NotRemovableIds.Add(_cellStateTable[x, y].Id);
         }
 
@@ -416,7 +414,7 @@ namespace Gains
             {
                 for (int j = 0; j < sizeY; j++)
                 {
-                    if (_cellStateTable[i, j].Id == MicrostructureId)
+                    if (NotRemovableIds.Contains(_cellStateTable[i, j].Id))
                     {
                         _cellStateTable[i, j].IsLocked = true;
                         if (MicrostructureType.Text == "DualPhase")
