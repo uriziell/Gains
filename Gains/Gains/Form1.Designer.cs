@@ -57,6 +57,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.ExportTxt = new System.Windows.Forms.Button();
             this.ImportTxt = new System.Windows.Forms.Button();
+            this.ExportJPG = new System.Windows.Forms.Button();
+            this.ImportJpg = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -318,11 +320,33 @@
             this.ImportTxt.UseVisualStyleBackColor = true;
             this.ImportTxt.Click += new System.EventHandler(this.ImportTxt_Click);
             // 
+            // ExportJPG
+            // 
+            this.ExportJPG.Location = new System.Drawing.Point(114, 12);
+            this.ExportJPG.Name = "ExportJPG";
+            this.ExportJPG.Size = new System.Drawing.Size(75, 23);
+            this.ExportJPG.TabIndex = 37;
+            this.ExportJPG.Text = "Export Jpg";
+            this.ExportJPG.UseVisualStyleBackColor = true;
+            this.ExportJPG.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // ImportJpg
+            // 
+            this.ImportJpg.Location = new System.Drawing.Point(114, 39);
+            this.ImportJpg.Name = "ImportJpg";
+            this.ImportJpg.Size = new System.Drawing.Size(75, 23);
+            this.ImportJpg.TabIndex = 38;
+            this.ImportJpg.Text = "Import Jpg";
+            this.ImportJpg.UseVisualStyleBackColor = true;
+            this.ImportJpg.Click += new System.EventHandler(this.ImportJpg_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ImportJpg);
+            this.Controls.Add(this.ExportJPG);
             this.Controls.Add(this.ImportTxt);
             this.Controls.Add(this.ExportTxt);
             this.Controls.Add(this.label10);
@@ -391,6 +415,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button ExportTxt;
         private System.Windows.Forms.Button ImportTxt;
+        private System.Windows.Forms.Button ExportJPG;
+        private System.Windows.Forms.Button ImportJpg;
     }
 }
 

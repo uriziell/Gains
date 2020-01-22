@@ -22,7 +22,7 @@ namespace Gains
         public Cell[,] AddNeighbor(int positionX, int positionY, Cell[,] cells, int maxRangeX, int maxRangeY,
             int probability, int microstructureId)
         {
-            if (cells[positionX, positionY].IsUpdated && cells[positionX,positionY].CellColor == Color.Black ) return cells;
+            if (cells[positionX, positionY].IsUpdated || cells[positionX,positionY].CellColor == Color.Black ) return cells;
             if (_neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).Count >= 5)
             {
                 var cell = _neighborhoodService.GetMooreNeighbors(cells, positionX, positionY, maxRangeX, maxRangeY).GroupBy(x => x.CellColor).First().ToList()[0];
@@ -58,7 +58,7 @@ namespace Gains
             }
             else
             {
-                if (cells[positionX, positionY].CellColor == Color.Black || microstructureId != 0 && cells[positionX, positionY].Id == microstructureId) return cells;
+                if (cells[positionX, positionY].CellColor == Color.Black || microstructureId != 0 && cells[positionX, positionY].Id == microstructureId || cells[positionX, positionY].IsUpdated) return cells;
                 var result = 0;
                 lock (SyncLock)
                 {

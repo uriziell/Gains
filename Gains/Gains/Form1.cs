@@ -19,6 +19,7 @@ namespace Gains
         private readonly Random _random = new Random();
         private static readonly object SyncLock = new object();
         private static int MicrostructureId = 0;
+        private List<int> NotRemovableIds;
         private int textImportSizeX = 0;
         private int textImportSizeY = 0;
 
@@ -29,6 +30,7 @@ namespace Gains
             _neumanService = new VonNeumanService();
             _inclusionService = new InclusionService();
             _propabilityService = new PropabilityService();
+            NotRemovableIds = new List<int>();
             InitializeComponent();
             InclusionType.Items.Add("Square");
             InclusionType.Items.Add("Circle");
@@ -36,13 +38,20 @@ namespace Gains
             NeighberhoodType.Items.Add("Propability");
             MicrostructureType.Items.Add("DualPhase");
             MicrostructureType.Items.Add("Subculture");
+            
+            //Test
+            SizeX.Text = "200";
+            SizeY.Text = "200";
+            Probability.Text = "10";
+            InclusionSize.Text = "2";
+            InclusionType.Text = "Square";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            var propability = 10;
+            var propability = int.Parse(Probability.Text);
             var z = 0;
             if (MicrostructureId != 0 && MicrostructureType.Text == "DualPhase" ||
                 MicrostructureType.Text == "Subculture")
@@ -398,6 +407,7 @@ namespace Gains
             var x = mouseEventArgs.X;
             var y = mouseEventArgs.Y;
             MicrostructureId = _cellStateTable[x, y].Id;
+            NotRemovableIds.Add(_cellStateTable[x, y].Id);
         }
 
         private void SetLockOnGrains(int sizeX, int sizeY)
@@ -516,6 +526,62 @@ namespace Gains
                     pictureBox1.Update();
                     _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
                 }
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.DefaultExt = "jpg";
+            saveDialog.Filter = "JPG images (*.jpg)|*.jpg";
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap bmp = InitBitmap(int.Parse(SizeX.Text), int.Parse(SizeY.Text), _cellStateTable);
+
+                var fileName = saveDialog.FileName;
+                bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+
+        private void ImportJpg_Click(object sender, EventArgs e)
+        {
+
+            var openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;";
+
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Multiselect = false;
+            openFileDialog.ShowDialog();
+            if (openFileDialog.CheckFileExists)
+            {
+                System.Drawing.Bitmap img = new System.Drawing.Bitmap(openFileDialog.FileName);
+                _cellStateTable = InitCellTable(img.Width, img.Height);
+                SizeX.Text = img.Width.ToString();
+                SizeY.Text = img.Height.ToString();
+                for (int x = 0; x < img.Width; x++)
+                {
+                    for (int y = 0; y < img.Height; y++)
+                    {
+                        Color pixel = img.GetPixel(x, y);
+
+                        _cellStateTable[x, y].Id = pixel.ToArgb();
+                        _cellStateTable[x, y].CellColor = pixel;
+
+                        if (_cellStateTable[x, y].CellColor == Color.White)
+                        {
+                            _cellStateTable[x, y].IsUpdated = false;
+                        }
+                    }
+                }
+                _bitmap = InitBitmap(img.Width, img.Height, _cellStateTable);
+                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                pictureBox1.Image = _bitmap;
+                pictureBox1.Show();
+                pictureBox1.Update();
+                _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
             }
         }
     }
