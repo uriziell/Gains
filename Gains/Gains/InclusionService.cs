@@ -60,12 +60,16 @@ namespace Gains
             {
                 for (int j = 0; j < sizeY; j++)
                 {
-                    if (i + 1 < sizeX && cellStateTable[i, j].CellColor != cellStateTable[i + 1, j].CellColor)
-                    {
-                        cellStateTable[i, j].PositionX = i;
-                        cellStateTable[i, j].PositionY = j;
-                        allInclusions.Add(cellStateTable[i, j]);
-                    }
+                    if (i + 1 < sizeX && j + 1 < sizeY && i - 1 >= 0 && j - 1 >= 0)
+                        if (cellStateTable[i, j].Id != cellStateTable[i + 1, j].Id ||
+                           cellStateTable[i, j].Id != cellStateTable[i - 1, j].Id ||
+                           cellStateTable[i, j].Id != cellStateTable[i, j + 1].Id ||
+                           cellStateTable[i, j].Id != cellStateTable[i, j - 1].Id)
+                        {
+                            cellStateTable[i, j].PositionX = i;
+                            cellStateTable[i, j].PositionY = j;
+                            allInclusions.Add(cellStateTable[i, j]);
+                        }
                 }
             }
 

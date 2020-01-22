@@ -16,6 +16,7 @@ namespace Gains
         private Bitmap _bitmap;
         private readonly Random _random = new Random();
         private static readonly object SyncLock = new object();
+        private static int MicrostructureId = 0;
 
         public Form1()
         {
@@ -29,6 +30,8 @@ namespace Gains
             InclusionType.Items.Add("Circle");
             NeighberhoodType.Items.Add("VonNeuman");
             NeighberhoodType.Items.Add("Propability");
+            MicrostructureType.Items.Add("DualPhase");
+            MicrostructureType.Items.Add("Subculture");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,6 +40,11 @@ namespace Gains
             var sizeY = int.Parse(SizeY.Text);
             var propability = 10;
             var z = 0;
+            if (MicrostructureId != 0 && MicrostructureType.Text == "DualPhase" ||
+                MicrostructureType.Text == "Subculture")
+            {
+                SetLockOnGrains(sizeX, sizeY);
+            }
 
             if (NeighberhoodType.Text == "VonNeuman")
             {
@@ -47,6 +55,7 @@ namespace Gains
                     {
                         for (int j = 0; j < sizeY; j++)
                         {
+                            if(!_cellStateTable[i, j].IsLocked)
                             _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
                         }
                     }
@@ -67,7 +76,7 @@ namespace Gains
                     {
                         for (int j = 0; j < sizeY; j++)
                         {
-                            _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability);
+                            _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability, MicrostructureId);
                         }
                     }
                     _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
@@ -140,7 +149,7 @@ namespace Gains
                     if (cells[i, j].CellColor == Color.White)
                         cells[i, j].IsUpdated = false;
 
-                    cells[i, j].IsLocked = false;
+                    cells[i, j].IsLockedForPropabilityPurpose = false;
                 }
             }
             return cells;
@@ -150,6 +159,7 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
+            _cellStateTable = InitCellTable(sizeX, sizeY);
             pictureBox1.Size = new Size(sizeX, sizeY);
             pictureBox1.BackColor = Color.White;
         }
@@ -158,7 +168,7 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            _cellStateTable = InitCellTable(sizeX, sizeY);
+           // _cellStateTable = InitCellTable(sizeX, sizeY);
             _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
@@ -207,7 +217,7 @@ namespace Gains
             var type = InclusionType.Text;
 
             var inclusions =
-                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable, inclusionsAmount, sizeX, sizeY);
+                _inclusionService.GetInclusionsAfterSimulation(_cellStateTable,sizeX, sizeY, inclusionsAmount);
 
             _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
 
@@ -222,19 +232,41 @@ namespace Gains
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
 
-            for (int i = 0; i < sizeX; i++)
+            if (MicrostructureType.Text != "Subculture" && MicrostructureType.Text != "DualPhase")
             {
-                for (int j = 0; j < sizeY; j++)
+                for (int i = 0; i < sizeX; i++)
                 {
-                    _cellStateTable[i, j].CellColor = Color.White;
-                    _cellStateTable[i, j].IsUpdated = false;
-                    _cellStateTable[i, j].IsLocked = false;
+                    for (int j = 0; j < sizeY; j++)
+                    {
+                        _cellStateTable[i, j].CellColor = Color.White;
+                        _cellStateTable[i, j].IsUpdated = false;
+                        _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
+                    }
                 }
+
+                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                pictureBox1.Image = _bitmap;
+                pictureBox1.Show();
+                pictureBox1.Update();
             }
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
-            pictureBox1.Image = _bitmap;
-            pictureBox1.Show();
-            pictureBox1.Update();
+            else
+            {
+                for (int i = 0; i < sizeX; i++)
+                {
+                    for (int j = 0; j < sizeY; j++)
+                    {
+                        if (_cellStateTable[i, j].Id != MicrostructureId)
+                            _cellStateTable[i, j].CellColor = Color.White;
+                        _cellStateTable[i, j].IsUpdated = false;
+                        _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
+                    }
+                }
+
+                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                pictureBox1.Image = _bitmap;
+                pictureBox1.Show();
+                pictureBox1.Update();
+            }
         }
 
         private void SetBou_Click(object sender, EventArgs e)
@@ -273,7 +305,7 @@ namespace Gains
                     if (_cellStateTable[i, j].CellColor == Color.Black) continue;
                     _cellStateTable[i, j].CellColor = Color.White;
                     _cellStateTable[i, j].IsUpdated = false;
-                    _cellStateTable[i, j].IsLocked = false;
+                    _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
                 }
             }
             _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
@@ -284,8 +316,54 @@ namespace Gains
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
         {
+            if (isGrainBoudariesModeActive.Checked)
+            {
+                var sizeX = int.Parse(SizeX.Text);
+                var sizeY = int.Parse(SizeY.Text);
+                var boundaries = GetBoundaries(e, sizeX, sizeY);
+
+                var inclusionSize = int.Parse(InclusionSize.Text);
+
+                if (_cellStateTable == null)
+                    _cellStateTable = InitCellTable(sizeX, sizeY);
+
+                _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+
+                var type = InclusionType.Text;
+
+                _cellStateTable =
+                    _inclusionService.AddInclusions(_cellStateTable, boundaries, inclusionSize, type, sizeX, sizeY);
+
+                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                pictureBox1.Image = _bitmap;
+                pictureBox1.Show();
+                pictureBox1.Update();
+            }
+
+            if (MicrostructureType.Text == "Subculture" || MicrostructureType.Text == "DualPhase")
+            {
+                GetNotRemovableGrainId(e);
+            }
+        }
+
+        private bool IsEnd()
+        {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
+            var counter = 0;
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    if (_cellStateTable[i, j].CellColor == Color.White)
+                        counter++;
+                }
+            }
+            return counter == 0;
+        }
+
+        private List<Cell> GetBoundaries(EventArgs e, int sizeX, int sizeY)
+        {
             var mouseEventArgs = e as MouseEventArgs;
             var x = mouseEventArgs.X;
             var y = mouseEventArgs.Y;
@@ -307,17 +385,33 @@ namespace Gains
                     }
                 }
             }
+            return boundaries;
+        }
 
-            var inclusionSize = int.Parse(InclusionSize.Text);
+        private void GetNotRemovableGrainId(EventArgs e)
+        {
+            var mouseEventArgs = e as MouseEventArgs;
+            var x = mouseEventArgs.X;
+            var y = mouseEventArgs.Y;
+            MicrostructureId = _cellStateTable[x, y].Id;
+        }
 
-            if (_cellStateTable == null)
-                _cellStateTable = InitCellTable(sizeX, sizeY);
-
-            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
-
-            var type = InclusionType.Text;
-
-            _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, boundaries, inclusionSize, type, sizeX, sizeY);
+        private void SetLockOnGrains(int sizeX, int sizeY)
+        {
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    if (_cellStateTable[i, j].Id == MicrostructureId)
+                    {
+                        _cellStateTable[i, j].IsLocked = true;
+                        if (MicrostructureType.Text == "DualPhase")
+                        {
+                            _cellStateTable[i, j].CellColor = Color.DeepPink;
+                        }
+                    }
+                }
+            }
 
             _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
@@ -325,20 +419,10 @@ namespace Gains
             pictureBox1.Update();
         }
 
-        private bool IsEnd()
+
+        private void label10_Click(object sender, EventArgs e)
         {
-            var sizeX = int.Parse(SizeX.Text);
-            var sizeY = int.Parse(SizeY.Text);
-            var counter = 0;
-            for (int i = 0; i < sizeX; i++)
-            {
-                for (int j = 0; j < sizeY; j++)
-                {
-                    if (_cellStateTable[i, j].CellColor == Color.White)
-                        counter++;
-                }
-            }
-            return counter == 0;
+
         }
     }
 }

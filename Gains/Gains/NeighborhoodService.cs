@@ -10,22 +10,22 @@ namespace Gains
             var neighbors = new List<Cell>();
             if (positionX - 1 > 0)
             {
-                if (currentCells[positionX - 1, positionY].IsUpdated && !currentCells[positionX - 1, positionY].IsLocked)
+                if (currentCells[positionX - 1, positionY].IsUpdated && !currentCells[positionX - 1, positionY].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY]);
             }
             else if (positionX + 1 < maxX - 1)
             {
-                if (currentCells[positionX + 1, positionY].IsUpdated && !currentCells[positionX + 1, positionY].IsLocked)
+                if (currentCells[positionX + 1, positionY].IsUpdated && !currentCells[positionX + 1, positionY].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY]);
             }
             if (positionY - 1 > 0)
             {
-                if (currentCells[positionX, positionY - 1].IsUpdated && !currentCells[positionX, positionY - 1].IsLocked)
+                if (currentCells[positionX, positionY - 1].IsUpdated && !currentCells[positionX, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX, positionY - 1]);
             }
             if (positionY + 1 < maxY - 1)
             {
-                if (currentCells[positionX, positionY + 1].IsUpdated && !currentCells[positionX, positionY + 1].IsLocked)
+                if (currentCells[positionX, positionY + 1].IsUpdated && !currentCells[positionX, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX, positionY + 1]);
             }
 
@@ -38,42 +38,42 @@ namespace Gains
 
             if (positionX - 1 >= 0)
             {
-                if (currentCells[positionX - 1, positionY].IsUpdated && !currentCells[positionX - 1, positionY].IsLocked)
+                if (currentCells[positionX - 1, positionY].IsUpdated && !currentCells[positionX - 1, positionY].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY]);
             }
             if (positionX + 1 <= maxX - 1)
             {
-                if (currentCells[positionX + 1, positionY].IsUpdated && !currentCells[positionX + 1, positionY].IsLocked)
+                if (currentCells[positionX + 1, positionY].IsUpdated && !currentCells[positionX + 1, positionY].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY]);
             }
             if (positionY - 1 > 0)
             {
-                if (currentCells[positionX, positionY - 1].IsUpdated && !currentCells[positionX, positionY - 1].IsLocked)
+                if (currentCells[positionX, positionY - 1].IsUpdated && !currentCells[positionX, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX, positionY - 1]);
             }
             if (positionY + 1 < maxY - 1)
             {
-                if (currentCells[positionX, positionY + 1].IsUpdated && !currentCells[positionX, positionY + 1].IsLocked)
+                if (currentCells[positionX, positionY + 1].IsUpdated && !currentCells[positionX, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX, positionY + 1]);
             }
             if (positionY + 1 < maxY - 1 && positionX + 1 < maxX - 1)
             {
-                if (currentCells[positionX + 1, positionY + 1].IsUpdated && !currentCells[positionX + 1, positionY + 1].IsLocked)
+                if (currentCells[positionX + 1, positionY + 1].IsUpdated && !currentCells[positionX + 1, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY + 1]);
             }
             if (positionY - 1 > 0 && positionX - 1 > 0)
             {
-                if (currentCells[positionX - 1, positionY - 1].IsUpdated && !currentCells[positionX - 1, positionY - 1].IsLocked)
+                if (currentCells[positionX - 1, positionY - 1].IsUpdated && !currentCells[positionX - 1, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY - 1]);
             }
             if (positionY + 1 < maxY && positionX - 1 > 0)
             {
-                if (currentCells[positionX - 1, positionY + 1].IsUpdated && !currentCells[positionX - 1, positionY + 1].IsLocked)
+                if (currentCells[positionX - 1, positionY + 1].IsUpdated && !currentCells[positionX - 1, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY + 1]);
             }
             if (positionY - 1 > 0 && positionX + 1 < maxX)
             {
-                if (currentCells[positionX + 1, positionY - 1].IsUpdated && !currentCells[positionX + 1, positionY - 1].IsLocked)
+                if (currentCells[positionX + 1, positionY - 1].IsUpdated && !currentCells[positionX + 1, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY - 1]);
             }
 
@@ -90,22 +90,22 @@ namespace Gains
 
             if (positionY + 1 < maxY - 1 && positionX + 1 < maxX - 1)
             {
-                if (currentCells[positionX + 1, positionY + 1].IsUpdated && !currentCells[positionX + 1, positionY + 1].IsLocked)
+                if (currentCells[positionX + 1, positionY + 1].IsUpdated && !currentCells[positionX + 1, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY + 1]);
             }
             if (positionY - 1 > 0 && positionX - 1 > 0)
             {
-                if (currentCells[positionX - 1, positionY - 1].IsUpdated && !currentCells[positionX - 1, positionY - 1].IsLocked)
+                if (currentCells[positionX - 1, positionY - 1].IsUpdated && !currentCells[positionX - 1, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY - 1]);
             }
             if (positionY + 1 < maxY && positionX - 1 > 0)
             {
-                if (currentCells[positionX - 1, positionY + 1].IsUpdated && !currentCells[positionX - 1, positionY + 1].IsLocked)
+                if (currentCells[positionX - 1, positionY + 1].IsUpdated && !currentCells[positionX - 1, positionY + 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX - 1, positionY + 1]);
             }
             if (positionY - 1 > 0 && positionX + 1 < maxX)
             {
-                if (currentCells[positionX + 1, positionY - 1].IsUpdated && !currentCells[positionX + 1, positionY - 1].IsLocked)
+                if (currentCells[positionX + 1, positionY - 1].IsUpdated && !currentCells[positionX + 1, positionY - 1].IsLockedForPropabilityPurpose)
                     neighbors.Add(currentCells[positionX + 1, positionY - 1]);
             }
 

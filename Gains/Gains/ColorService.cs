@@ -45,7 +45,7 @@ namespace Gains
                 case 3: return Color.Orange;
                 case 4: return Color.Purple;
                 case 5: return Color.Brown;
-                case 6: return Color.DeepPink;
+                case 6: return Color.DarkBlue;
                 case 7: return Color.Coral;
                 case 8: return Color.MediumPurple;
                 case 9: return Color.Tomato;

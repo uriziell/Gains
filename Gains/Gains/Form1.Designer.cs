@@ -53,6 +53,11 @@
             this.CleanUp = new System.Windows.Forms.Button();
             this.SetBou = new System.Windows.Forms.Button();
             this.CleanUpWitoutBoundaries = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.MicrostructureType = new System.Windows.Forms.ComboBox();
+            this.isGrainBoudariesModeActive = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -275,11 +280,61 @@
             this.CleanUpWitoutBoundaries.UseVisualStyleBackColor = true;
             this.CleanUpWitoutBoundaries.Click += new System.EventHandler(this.CleanUpWithoutBoundaries_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(0, 0);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 30;
+            // 
+            // MicrostructureType
+            // 
+            this.MicrostructureType.FormattingEnabled = true;
+            this.MicrostructureType.Location = new System.Drawing.Point(626, 149);
+            this.MicrostructureType.Name = "MicrostructureType";
+            this.MicrostructureType.Size = new System.Drawing.Size(68, 21);
+            this.MicrostructureType.TabIndex = 31;
+            // 
+            // isGrainBoudariesModeActive
+            // 
+            this.isGrainBoudariesModeActive.AutoSize = true;
+            this.isGrainBoudariesModeActive.Location = new System.Drawing.Point(626, 197);
+            this.isGrainBoudariesModeActive.Name = "isGrainBoudariesModeActive";
+            this.isGrainBoudariesModeActive.Size = new System.Drawing.Size(135, 17);
+            this.isGrainBoudariesModeActive.TabIndex = 32;
+            this.isGrainBoudariesModeActive.Text = "Grain boundaries mode";
+            this.isGrainBoudariesModeActive.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(0, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 13);
+            this.label9.TabIndex = 33;
+            this.label9.Text = "label9";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(700, 152);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(97, 13);
+            this.label10.TabIndex = 34;
+            this.label10.Text = "Microstructure type";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.isGrainBoudariesModeActive);
+            this.Controls.Add(this.MicrostructureType);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.CleanUpWitoutBoundaries);
             this.Controls.Add(this.SetBou);
             this.Controls.Add(this.CleanUp);
@@ -340,6 +395,11 @@
         private System.Windows.Forms.Button CleanUp;
         private System.Windows.Forms.Button SetBou;
         private System.Windows.Forms.Button CleanUpWitoutBoundaries;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox MicrostructureType;
+        private System.Windows.Forms.CheckBox isGrainBoudariesModeActive;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
     }
 }
 
