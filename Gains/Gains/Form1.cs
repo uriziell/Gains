@@ -14,6 +14,7 @@ namespace Gains
         private readonly VonNeumanService _neumanService;
         private readonly InclusionService _inclusionService;
         private readonly PropabilityService _propabilityService;
+        private readonly BitmapService _bitmapService;
         private Cell[,] _cellStateTable;
         private Bitmap _bitmap;
         private readonly Random _random = new Random();
@@ -30,6 +31,7 @@ namespace Gains
             _inclusionService = new InclusionService();
             _propabilityService = new PropabilityService();
             NotRemovableIds = new List<int>();
+            _bitmapService = new BitmapService();
             InitializeComponent();
             InclusionType.Items.Add("Square");
             InclusionType.Items.Add("Circle");
@@ -71,7 +73,7 @@ namespace Gains
                                 _cellStateTable = _neumanService.AddNeighbor(i, j, _cellStateTable[i, j].CellColor, _cellStateTable, sizeX, sizeY);
                         }
                     }
-                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
@@ -91,7 +93,7 @@ namespace Gains
                             _cellStateTable = _propabilityService.AddNeighbor(i, j, _cellStateTable, sizeX, sizeY, propability, NotRemovableIds);
                         }
                     }
-                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
@@ -114,31 +116,6 @@ namespace Gains
             }
 
             return cellArray;
-        }
-        private static Bitmap InitBitmap(int sizeX, int sizeY, Cell[,] cellArray)
-        {
-            var bitmap = new Bitmap(sizeX, sizeY);
-
-            for (var i = 1; i < bitmap.Height - 1; i++)
-            {
-                for (var j = 1; j < bitmap.Width - 1; j++)
-                {
-                    bitmap.SetPixel(j, i, cellArray[j, i].CellColor);
-                }
-            }
-
-            return bitmap;
-        }
-        private static Bitmap UpdateBitmap(Bitmap bitmap, Cell[,] cellArray)
-        {
-            for (var i = 0; i < bitmap.Height; i++)
-            {
-                for (var j = 0; j < bitmap.Width; j++)
-                {
-                    bitmap.SetPixel(j, i, cellArray[j, i].CellColor);
-                }
-            }
-            return bitmap;
         }
 
         private Cell[,] RemoveUpdateLockOnCells(Cell[,] cells, int x, int y)
@@ -181,7 +158,7 @@ namespace Gains
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
             // _cellStateTable = InitCellTable(sizeX, sizeY);
-            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+            _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
             pictureBox1.Image = _bitmap;
@@ -199,7 +176,7 @@ namespace Gains
             if (_cellStateTable == null)
                 _cellStateTable = InitCellTable(sizeX, sizeY);
 
-            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+            _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
             var type = InclusionType.Text;
 
@@ -208,7 +185,7 @@ namespace Gains
                 _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusionSize, type, sizeX, sizeY);
             }
 
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
@@ -224,7 +201,7 @@ namespace Gains
             if (_cellStateTable == null)
                 _cellStateTable = InitCellTable(sizeX, sizeY);
 
-            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+            _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
             var type = InclusionType.Text;
 
@@ -233,7 +210,7 @@ namespace Gains
 
             _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
 
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
@@ -256,7 +233,7 @@ namespace Gains
                     }
                 }
 
-                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
@@ -274,7 +251,7 @@ namespace Gains
                     }
                 }
 
-                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
@@ -290,7 +267,7 @@ namespace Gains
             if (_cellStateTable == null)
                 _cellStateTable = InitCellTable(sizeX, sizeY);
 
-            _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+            _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
             var type = InclusionType.Text;
 
@@ -299,7 +276,7 @@ namespace Gains
 
             _cellStateTable = _inclusionService.AddInclusions(_cellStateTable, inclusions, inclusionSize, type, sizeX, sizeY);
 
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
@@ -320,7 +297,7 @@ namespace Gains
                     _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
                 }
             }
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
@@ -339,14 +316,14 @@ namespace Gains
                 if (_cellStateTable == null)
                     _cellStateTable = InitCellTable(sizeX, sizeY);
 
-                _bitmap = InitBitmap(sizeX, sizeY, _cellStateTable);
+                _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
                 var type = InclusionType.Text;
 
                 _cellStateTable =
                     _inclusionService.AddInclusions(_cellStateTable, boundaries, inclusionSize, type, sizeX, sizeY);
 
-                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
@@ -425,7 +402,7 @@ namespace Gains
                 }
             }
 
-            _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
@@ -517,8 +494,8 @@ namespace Gains
                         x++;
                     }
 
-                    _bitmap = InitBitmap(textImportSizeX, textImportSizeY, _cellStateTable);
-                    _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                    _bitmap = _bitmapService.InitBitmap(textImportSizeX, textImportSizeY, _cellStateTable);
+                    _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
@@ -535,7 +512,7 @@ namespace Gains
 
             if (saveDialog.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bmp = InitBitmap(int.Parse(SizeX.Text), int.Parse(SizeY.Text), _cellStateTable);
+                Bitmap bmp = _bitmapService.InitBitmap(int.Parse(SizeX.Text), int.Parse(SizeY.Text), _cellStateTable);
 
                 var fileName = saveDialog.FileName;
                 bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
@@ -574,8 +551,8 @@ namespace Gains
                         }
                     }
                 }
-                _bitmap = InitBitmap(img.Width, img.Height, _cellStateTable);
-                _bitmap = UpdateBitmap(_bitmap, _cellStateTable);
+                _bitmap = _bitmapService.InitBitmap(img.Width, img.Height, _cellStateTable);
+                _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
