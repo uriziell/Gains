@@ -102,8 +102,11 @@ namespace Gains
                     {
                         for (int k = 0; k < inclusionSize - 1; k++)
                         {
-                            cellStateTable[x + j, y + k].CellColor = Color.Black;
-                            cellStateTable[x + j, y + j].IsUpdated = false;
+                            if(x + j < sizeX && y + k < sizeY && y + j < sizeY)
+                            {
+                                cellStateTable[x + j, y + k].CellColor = Color.Black;
+                                cellStateTable[x + j, y + j].IsUpdated = false;
+                            }
                         }
                     }
                 else if (type == "Circle")

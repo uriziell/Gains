@@ -22,6 +22,7 @@ namespace Gains
         private List<int> NotRemovableIds;
         private int textImportSizeX = 0;
         private int textImportSizeY = 0;
+        private bool IsGrainExist = false;
 
         public Form1()
         {
@@ -39,7 +40,7 @@ namespace Gains
             NeighberhoodType.Items.Add("Propability");
             MicrostructureType.Items.Add("DualPhase");
             MicrostructureType.Items.Add("Subculture");
-            
+
             //Test
             SizeX.Text = "200";
             SizeY.Text = "200";
@@ -57,12 +58,12 @@ namespace Gains
             if (NotRemovableIds.Count != 0 && MicrostructureType.Text == "DualPhase" ||
                 MicrostructureType.Text == "Subculture")
             {
-                SetLockOnGrains(sizeX, sizeY);
+                _gainService.SetLockOnGrains(sizeX, sizeY, _cellStateTable, NotRemovableIds, MicrostructureType.Text, _bitmap, pictureBox1);
             }
 
             if (NeighberhoodType.Text == "VonNeuman")
             {
-                while (!IsEnd())
+                while (!IsEnd() && IsGrainExist)
                 {
 
                     for (int i = 0; i < sizeX; i++)
@@ -77,14 +78,14 @@ namespace Gains
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
-                    _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, sizeX, sizeY);
+                    _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, sizeX, sizeY);
                     z++;
                 }
             }
 
             if (NeighberhoodType.Text == "Propability")
             {
-                while (!IsEnd())
+                while (!IsEnd() && IsGrainExist)
                 {
                     for (int i = 0; i < sizeX; i++)
                     {
@@ -97,58 +98,18 @@ namespace Gains
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
-                    _cellStateTable = RemoveUpdateLockOnCellsPropability(_cellStateTable, sizeX, sizeY);
+                    _cellStateTable = _gainService.RemoveUpdateLockOnCellsPropability(_cellStateTable, sizeX, sizeY);
                     z++;
                 }
             }
         }
 
-        private Cell[,] InitCellTable(int sizeX, int sizeY)
-        {
-            var cellArray = new Cell[sizeX, sizeY];
-
-            for (var i = 0; i < sizeX; i++)
-            {
-                for (var j = 0; j < sizeY; j++)
-                {
-                    cellArray[i, j] = new Cell { CellColor = _colorService.GetDefaultColor() };
-                }
-            }
-
-            return cellArray;
-        }
-
-        private Cell[,] RemoveUpdateLockOnCells(Cell[,] cells, int x, int y)
-        {
-            for (int i = 0; i < x; i++)
-            {
-                for (int j = 0; j < y; j++)
-                {
-                    cells[i, j].IsUpdated = false;
-                }
-            }
-            return cells;
-        }
-        private Cell[,] RemoveUpdateLockOnCellsPropability(Cell[,] cells, int x, int y)
-        {
-            for (int i = 0; i < x; i++)
-            {
-                for (int j = 0; j < y; j++)
-                {
-                    if (cells[i, j].CellColor == Color.White)
-                        cells[i, j].IsUpdated = false;
-
-                    cells[i, j].IsLockedForPropabilityPurpose = false;
-                }
-            }
-            return cells;
-        }
 
         private void GenerateSpace_Click(object sender, EventArgs e)
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            _cellStateTable = InitCellTable(sizeX, sizeY);
+            _cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
             pictureBox1.Size = new Size(sizeX, sizeY);
             pictureBox1.BackColor = Color.White;
         }
@@ -160,6 +121,7 @@ namespace Gains
             // _cellStateTable = InitCellTable(sizeX, sizeY);
             _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
+            IsGrainExist = true;
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
@@ -174,7 +136,7 @@ namespace Gains
             var inclusionSize = int.Parse(InclusionSize.Text);
 
             if (_cellStateTable == null)
-                _cellStateTable = InitCellTable(sizeX, sizeY);
+                _cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
 
             _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
@@ -195,11 +157,11 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            var inclusionsAmount = int.Parse(InclusionSize.Text);
+            var inclusionsAmount = int.Parse(NumberOfInclusions.Text);
             var inclusionSize = int.Parse(InclusionSize.Text);
 
             if (_cellStateTable == null)
-                _cellStateTable = InitCellTable(sizeX, sizeY);
+                _cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
 
             _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
@@ -244,7 +206,7 @@ namespace Gains
                 {
                     for (int j = 0; j < sizeY; j++)
                     {
-                        if ( !NotRemovableIds.Contains(_cellStateTable[i, j].Id))
+                        if (!NotRemovableIds.Contains(_cellStateTable[i, j].Id))
                             _cellStateTable[i, j].CellColor = Color.White;
                         _cellStateTable[i, j].IsUpdated = false;
                         _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
@@ -256,6 +218,8 @@ namespace Gains
                 pictureBox1.Show();
                 pictureBox1.Update();
             }
+
+            IsGrainExist = false;
         }
 
         private void SetBou_Click(object sender, EventArgs e)
@@ -265,7 +229,7 @@ namespace Gains
             var inclusionSize = int.Parse(InclusionSize.Text);
 
             if (_cellStateTable == null)
-                _cellStateTable = InitCellTable(sizeX, sizeY);
+                _cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
 
             _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
@@ -301,6 +265,7 @@ namespace Gains
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
+            IsGrainExist = false;
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -309,12 +274,12 @@ namespace Gains
             {
                 var sizeX = int.Parse(SizeX.Text);
                 var sizeY = int.Parse(SizeY.Text);
-                var boundaries = GetBoundaries(e, sizeX, sizeY);
+                var boundaries = _gainService.GetBoundaries(e, sizeX, sizeY, _cellStateTable);
 
                 var inclusionSize = int.Parse(InclusionSize.Text);
 
                 if (_cellStateTable == null)
-                    _cellStateTable = InitCellTable(sizeX, sizeY);
+                    _cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
 
                 _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
 
@@ -331,7 +296,7 @@ namespace Gains
 
             if (MicrostructureType.Text == "Subculture" || MicrostructureType.Text == "DualPhase")
             {
-                GetNotRemovableGrainId(e);
+                _gainService.GetNotRemovableGrainId(e, _cellStateTable, NotRemovableIds);
             }
         }
 
@@ -351,69 +316,12 @@ namespace Gains
             return counter == 0;
         }
 
-        private List<Cell> GetBoundaries(EventArgs e, int sizeX, int sizeY)
-        {
-            var mouseEventArgs = e as MouseEventArgs;
-            var x = mouseEventArgs.X;
-            var y = mouseEventArgs.Y;
-            var id = _cellStateTable[x, y].Id;
-            var boundaries = new List<Cell>();
-            for (int i = 0; i < sizeX; i++)
-            {
-                for (int j = 0; j < sizeY; j++)
-                {
-                    if (i - 1 < 0 || i >= sizeX - 1 || j - 1 < 0 || j + 1 >= sizeY) continue;
-                    if (_cellStateTable[i, j].Id == id && id != _cellStateTable[i + 1, j].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i - 1, j].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j + 1].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j - 1].Id)
-                    {
-                        _cellStateTable[i, j].PositionX = i;
-                        _cellStateTable[i, j].PositionY = j;
-                        boundaries.Add(_cellStateTable[i, j]);
-                    }
-                }
-            }
-            return boundaries;
-        }
-
-        private void GetNotRemovableGrainId(EventArgs e)
-        {
-            var mouseEventArgs = e as MouseEventArgs;
-            var x = mouseEventArgs.X;
-            var y = mouseEventArgs.Y;
-            NotRemovableIds.Add(_cellStateTable[x, y].Id);
-        }
-
-        private void SetLockOnGrains(int sizeX, int sizeY)
-        {
-            for (int i = 0; i < sizeX; i++)
-            {
-                for (int j = 0; j < sizeY; j++)
-                {
-                    if (NotRemovableIds.Contains(_cellStateTable[i, j].Id))
-                    {
-                        _cellStateTable[i, j].IsLocked = true;
-                        if (MicrostructureType.Text == "DualPhase")
-                        {
-                            _cellStateTable[i, j].CellColor = Color.DeepPink;
-                        }
-                    }
-                }
-            }
-
-            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
-            pictureBox1.Image = _bitmap;
-            pictureBox1.Show();
-            pictureBox1.Update();
-        }
-
-
         private void label10_Click(object sender, EventArgs e)
         {
 
         }
 
+        #region Input Output Opertions      
         private void ExportTxt_Click(object sender, EventArgs e)
         {
             var sizeX = int.Parse(SizeX.Text);
@@ -468,7 +376,7 @@ namespace Gains
                         {
                             textImportSizeX = Convert.ToInt32(lineArray[0]);
                             textImportSizeY = Convert.ToInt32(lineArray[1]);
-                            _cellStateTable = InitCellTable(Convert.ToInt32(lineArray[0]), Convert.ToInt32(lineArray[1]));
+                            _cellStateTable = _gainService.InitCellTable(Convert.ToInt32(lineArray[0]), Convert.ToInt32(lineArray[1]));
                             firstLine = false;
                             continue;
                         }
@@ -499,7 +407,7 @@ namespace Gains
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
-                    _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
+                    _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
                 }
             }
         }
@@ -533,7 +441,7 @@ namespace Gains
             if (openFileDialog.CheckFileExists)
             {
                 System.Drawing.Bitmap img = new System.Drawing.Bitmap(openFileDialog.FileName);
-                _cellStateTable = InitCellTable(img.Width, img.Height);
+                _cellStateTable = _gainService.InitCellTable(img.Width, img.Height);
                 SizeX.Text = img.Width.ToString();
                 SizeY.Text = img.Height.ToString();
                 for (int x = 0; x < img.Width; x++)
@@ -556,8 +464,9 @@ namespace Gains
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
-                _cellStateTable = RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
+                _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
             }
         }
+        #endregion
     }
 }
