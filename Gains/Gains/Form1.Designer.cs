@@ -59,6 +59,11 @@
             this.ImportTxt = new System.Windows.Forms.Button();
             this.ExportJPG = new System.Windows.Forms.Button();
             this.ImportJpg = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ForceCleanup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,7 +78,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(341, 396);
+            this.button1.Location = new System.Drawing.Point(645, 348);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -131,7 +136,7 @@
             // 
             // GenerateSpace
             // 
-            this.GenerateSpace.Location = new System.Drawing.Point(429, 197);
+            this.GenerateSpace.Location = new System.Drawing.Point(393, 349);
             this.GenerateSpace.Name = "GenerateSpace";
             this.GenerateSpace.Size = new System.Drawing.Size(112, 23);
             this.GenerateSpace.TabIndex = 11;
@@ -141,7 +146,7 @@
             // 
             // AddGains
             // 
-            this.AddGains.Location = new System.Drawing.Point(429, 227);
+            this.AddGains.Location = new System.Drawing.Point(533, 346);
             this.AddGains.Name = "AddGains";
             this.AddGains.Size = new System.Drawing.Size(76, 27);
             this.AddGains.TabIndex = 12;
@@ -151,7 +156,7 @@
             // 
             // NumberOfInclusions
             // 
-            this.NumberOfInclusions.Location = new System.Drawing.Point(429, 261);
+            this.NumberOfInclusions.Location = new System.Drawing.Point(429, 197);
             this.NumberOfInclusions.Name = "NumberOfInclusions";
             this.NumberOfInclusions.Size = new System.Drawing.Size(56, 20);
             this.NumberOfInclusions.TabIndex = 13;
@@ -159,7 +164,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(491, 264);
+            this.label4.Location = new System.Drawing.Point(492, 201);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(102, 13);
             this.label4.TabIndex = 14;
@@ -167,7 +172,7 @@
             // 
             // AddInclusions
             // 
-            this.AddInclusions.Location = new System.Drawing.Point(429, 339);
+            this.AddInclusions.Location = new System.Drawing.Point(429, 276);
             this.AddInclusions.Name = "AddInclusions";
             this.AddInclusions.Size = new System.Drawing.Size(86, 23);
             this.AddInclusions.TabIndex = 15;
@@ -178,14 +183,14 @@
             // InclusionType
             // 
             this.InclusionType.FormattingEnabled = true;
-            this.InclusionType.Location = new System.Drawing.Point(429, 312);
+            this.InclusionType.Location = new System.Drawing.Point(429, 249);
             this.InclusionType.Name = "InclusionType";
             this.InclusionType.Size = new System.Drawing.Size(121, 21);
             this.InclusionType.TabIndex = 16;
             // 
             // InclusionSize
             // 
-            this.InclusionSize.Location = new System.Drawing.Point(429, 288);
+            this.InclusionSize.Location = new System.Drawing.Point(429, 223);
             this.InclusionSize.Name = "InclusionSize";
             this.InclusionSize.Size = new System.Drawing.Size(56, 20);
             this.InclusionSize.TabIndex = 17;
@@ -193,7 +198,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(492, 288);
+            this.label6.Location = new System.Drawing.Point(495, 226);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 19;
@@ -201,7 +206,7 @@
             // 
             // AddInclusionsAfterSimulation
             // 
-            this.AddInclusionsAfterSimulation.Location = new System.Drawing.Point(521, 339);
+            this.AddInclusionsAfterSimulation.Location = new System.Drawing.Point(521, 276);
             this.AddInclusionsAfterSimulation.Name = "AddInclusionsAfterSimulation";
             this.AddInclusionsAfterSimulation.Size = new System.Drawing.Size(173, 23);
             this.AddInclusionsAfterSimulation.TabIndex = 20;
@@ -231,9 +236,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(700, 119);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(55, 13);
+            this.label8.Size = new System.Drawing.Size(66, 13);
             this.label8.TabIndex = 25;
-            this.label8.Text = "Probability";
+            this.label8.Text = "Probability %";
             // 
             // Probability
             // 
@@ -244,7 +249,7 @@
             // 
             // CleanUp
             // 
-            this.CleanUp.Location = new System.Drawing.Point(12, 396);
+            this.CleanUp.Location = new System.Drawing.Point(12, 410);
             this.CleanUp.Name = "CleanUp";
             this.CleanUp.Size = new System.Drawing.Size(75, 23);
             this.CleanUp.TabIndex = 27;
@@ -254,7 +259,7 @@
             // 
             // SetBou
             // 
-            this.SetBou.Location = new System.Drawing.Point(429, 368);
+            this.SetBou.Location = new System.Drawing.Point(243, 409);
             this.SetBou.Name = "SetBou";
             this.SetBou.Size = new System.Drawing.Size(97, 23);
             this.SetBou.TabIndex = 28;
@@ -264,7 +269,7 @@
             // 
             // CleanUpWitoutBoundaries
             // 
-            this.CleanUpWitoutBoundaries.Location = new System.Drawing.Point(94, 396);
+            this.CleanUpWitoutBoundaries.Location = new System.Drawing.Point(93, 409);
             this.CleanUpWitoutBoundaries.Name = "CleanUpWitoutBoundaries";
             this.CleanUpWitoutBoundaries.Size = new System.Drawing.Size(144, 23);
             this.CleanUpWitoutBoundaries.TabIndex = 29;
@@ -340,11 +345,62 @@
             this.ImportJpg.UseVisualStyleBackColor = true;
             this.ImportJpg.Click += new System.EventHandler(this.ImportJpg_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(556, 252);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(76, 13);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "Inclusion Type";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(511, 356);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(16, 13);
+            this.label9.TabIndex = 40;
+            this.label9.Text = "->";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(623, 354);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(16, 13);
+            this.label11.TabIndex = 41;
+            this.label11.Text = "->";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(554, 330);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(55, 13);
+            this.label12.TabIndex = 42;
+            this.label12.Text = "Build Flow";
+            // 
+            // ForceCleanup
+            // 
+            this.ForceCleanup.Location = new System.Drawing.Point(114, 465);
+            this.ForceCleanup.Name = "ForceCleanup";
+            this.ForceCleanup.Size = new System.Drawing.Size(89, 23);
+            this.ForceCleanup.TabIndex = 43;
+            this.ForceCleanup.Text = "Force Cleanup";
+            this.ForceCleanup.UseVisualStyleBackColor = true;
+            this.ForceCleanup.Click += new System.EventHandler(this.ForceCleanup_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(841, 570);
+            this.Controls.Add(this.ForceCleanup);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.ImportJpg);
             this.Controls.Add(this.ExportJPG);
             this.Controls.Add(this.ImportTxt);
@@ -417,6 +473,11 @@
         private System.Windows.Forms.Button ImportTxt;
         private System.Windows.Forms.Button ExportJPG;
         private System.Windows.Forms.Button ImportJpg;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button ForceCleanup;
     }
 }
 

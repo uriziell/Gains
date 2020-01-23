@@ -10,27 +10,27 @@ namespace Gains
     public partial class Form1 : Form
     {
         private readonly ColorService _colorService;
-        private readonly GainService _gainService;
+        private readonly GrainService _gainService;
         private readonly VonNeumanService _neumanService;
         private readonly InclusionService _inclusionService;
-        private readonly PropabilityService _propabilityService;
+        private readonly ProbabilityService _propabilityService;
         private readonly BitmapService _bitmapService;
         private Cell[,] _cellStateTable;
         private Bitmap _bitmap;
         private readonly Random _random = new Random();
         private static readonly object SyncLock = new object();
         private List<int> NotRemovableIds;
-        private int textImportSizeX = 0;
-        private int textImportSizeY = 0;
-        private bool IsGrainExist = false;
+        private int _textImportSizeX = 0;
+        private int _textImportSizeY = 0;
+        private bool _isGrainExist = false;
 
         public Form1()
         {
-            _gainService = new GainService();
+            _gainService = new GrainService();
             _colorService = new ColorService();
             _neumanService = new VonNeumanService();
             _inclusionService = new InclusionService();
-            _propabilityService = new PropabilityService();
+            _propabilityService = new ProbabilityService();
             NotRemovableIds = new List<int>();
             _bitmapService = new BitmapService();
             InitializeComponent();
@@ -47,6 +47,7 @@ namespace Gains
             Probability.Text = "10";
             InclusionSize.Text = "2";
             InclusionType.Text = "Square";
+            NumberOfInclusions.Text = "0";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -63,7 +64,7 @@ namespace Gains
 
             if (NeighberhoodType.Text == "VonNeuman")
             {
-                while (!IsEnd() && IsGrainExist)
+                while (!IsEnd() && _isGrainExist && z != 500)
                 {
 
                     for (int i = 0; i < sizeX; i++)
@@ -85,7 +86,7 @@ namespace Gains
 
             if (NeighberhoodType.Text == "Propability")
             {
-                while (!IsEnd() && IsGrainExist)
+                while (!IsEnd() && _isGrainExist && z != 500)
                 {
                     for (int i = 0; i < sizeX; i++)
                     {
@@ -104,7 +105,6 @@ namespace Gains
             }
         }
 
-
         private void GenerateSpace_Click(object sender, EventArgs e)
         {
             var sizeX = int.Parse(SizeX.Text);
@@ -118,10 +118,10 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            // _cellStateTable = InitCellTable(sizeX, sizeY);
+             //_cellStateTable = _gainService.InitCellTable(sizeX, sizeY);
             _bitmap = _bitmapService.InitBitmap(sizeX, sizeY, _cellStateTable);
             var gains = _gainService.CreateGain(int.Parse(NumberOfGains.Text));
-            IsGrainExist = true;
+            _isGrainExist = true;
             _bitmap = _gainService.SetGainToBitmap(_bitmap, gains, ref _cellStateTable);
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
@@ -132,7 +132,7 @@ namespace Gains
         {
             var sizeX = int.Parse(SizeX.Text);
             var sizeY = int.Parse(SizeY.Text);
-            var inclusionsAmount = int.Parse(InclusionSize.Text);
+            var inclusionsAmount = int.Parse(NumberOfInclusions.Text);
             var inclusionSize = int.Parse(InclusionSize.Text);
 
             if (_cellStateTable == null)
@@ -219,7 +219,7 @@ namespace Gains
                 pictureBox1.Update();
             }
 
-            IsGrainExist = false;
+            _isGrainExist = false;
         }
 
         private void SetBou_Click(object sender, EventArgs e)
@@ -265,7 +265,7 @@ namespace Gains
             pictureBox1.Image = _bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
-            IsGrainExist = false;
+            _isGrainExist = false;
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -374,20 +374,20 @@ namespace Gains
                             continue;
                         if (firstLine)
                         {
-                            textImportSizeX = Convert.ToInt32(lineArray[0]);
-                            textImportSizeY = Convert.ToInt32(lineArray[1]);
+                            _textImportSizeX = Convert.ToInt32(lineArray[0]);
+                            _textImportSizeY = Convert.ToInt32(lineArray[1]);
                             _cellStateTable = _gainService.InitCellTable(Convert.ToInt32(lineArray[0]), Convert.ToInt32(lineArray[1]));
                             firstLine = false;
                             continue;
                         }
 
-                        if (x == textImportSizeX)
+                        if (x == _textImportSizeX)
                         {
                             x = 0;
                             y++;
                         }
 
-                        if (x < textImportSizeX && y < textImportSizeY)
+                        if (x < _textImportSizeX && y < _textImportSizeY)
                         {
                             _cellStateTable[x, y].Id = Convert.ToInt32(lineArray[0]);
                             _cellStateTable[x, y].CellColor = Color.FromArgb(255,
@@ -402,12 +402,12 @@ namespace Gains
                         x++;
                     }
 
-                    _bitmap = _bitmapService.InitBitmap(textImportSizeX, textImportSizeY, _cellStateTable);
+                    _bitmap = _bitmapService.InitBitmap(_textImportSizeX, _textImportSizeY, _cellStateTable);
                     _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
-                    _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
+                    _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, _textImportSizeX, _textImportSizeY);
                 }
             }
         }
@@ -464,9 +464,34 @@ namespace Gains
                 pictureBox1.Image = _bitmap;
                 pictureBox1.Show();
                 pictureBox1.Update();
-                _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, textImportSizeX, textImportSizeY);
+                _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, _textImportSizeX, _textImportSizeY);
             }
         }
         #endregion
+
+        private void ForceCleanup_Click(object sender, EventArgs e)
+        {
+            var sizeX = int.Parse(SizeX.Text);
+            var sizeY = int.Parse(SizeY.Text);
+                for (int i = 0; i < sizeX; i++)
+                {
+                    for (int j = 0; j < sizeY; j++)
+                    {
+                        _cellStateTable[i, j].CellColor = Color.White;
+                        _cellStateTable[i, j].Id = 0;
+                        _cellStateTable[i, j].IsUpdated = false;
+                        _cellStateTable[i, j].IsLockedForPropabilityPurpose = false;
+                        _cellStateTable[i, j].IsLocked = false;
+                        _cellStateTable[i, j].PositionX = 0;
+                        _cellStateTable[i, j].PositionY = 0;
+                    }
+                }
+
+                _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
+                pictureBox1.Image = _bitmap;
+                pictureBox1.Show();
+                pictureBox1.Update();
+            
+        }
     }
 }

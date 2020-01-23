@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gains
 {
-    public class GainService
+    public class GrainService
     {
         private readonly ColorService _colorService;
         private readonly BitmapService _bitmapService;
         private readonly Random _random;
         private readonly object _syncLock;
 
-        public GainService()
+        public GrainService()
         {
             _colorService = new ColorService();
             _bitmapService = new BitmapService();
@@ -38,21 +35,20 @@ namespace Gains
                     Id = id
                 });
             }
-
             return gains;
         }
         public Bitmap SetGainToBitmap(Bitmap bitmap, List<Cell> gains, ref Cell[,] tabCells)
         {
             var r = new Random();
-            int randomX;
-            int randomY;
             foreach (var gain in gains)
             {
+                int randomX;
+                int randomY;
                 while (true)
-                {                              
-                     randomX = r.Next(bitmap.Size.Width);
-                     randomY = r.Next(bitmap.Size.Height);
-                    if(tabCells[randomX,randomY].CellColor == Color.White )
+                {
+                    randomX = r.Next(bitmap.Size.Width);
+                    randomY = r.Next(bitmap.Size.Height);
+                    if (tabCells[randomX, randomY].CellColor == Color.White)
                         break;
                 }
 
@@ -76,7 +72,6 @@ namespace Gains
                     cellArray[i, j] = new Cell { CellColor = _colorService.GetDefaultColor() };
                 }
             }
-
             return cellArray;
         }
 
@@ -105,57 +100,58 @@ namespace Gains
             }
             return cells;
         }
-        public List<Cell> GetBoundaries(EventArgs e, int sizeX, int sizeY, Cell[,] _cellStateTable)
+        public List<Cell> GetBoundaries(EventArgs e, int sizeX, int sizeY, Cell[,] cellStateTable)
         {
             var mouseEventArgs = e as MouseEventArgs;
             var x = mouseEventArgs.X;
             var y = mouseEventArgs.Y;
-            var id = _cellStateTable[x, y].Id;
+            var id = cellStateTable[x, y].Id;
             var boundaries = new List<Cell>();
             for (int i = 0; i < sizeX; i++)
             {
                 for (int j = 0; j < sizeY; j++)
                 {
                     if (i - 1 < 0 || i >= sizeX - 1 || j - 1 < 0 || j + 1 >= sizeY) continue;
-                    if (_cellStateTable[i, j].Id == id && id != _cellStateTable[i + 1, j].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i - 1, j].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j + 1].Id ||
-                        _cellStateTable[i, j].Id == id && id != _cellStateTable[i, j - 1].Id)
+                    if (cellStateTable[i, j].Id == id && id != cellStateTable[i + 1, j].Id ||
+                        cellStateTable[i, j].Id == id && id != cellStateTable[i - 1, j].Id ||
+                        cellStateTable[i, j].Id == id && id != cellStateTable[i, j + 1].Id ||
+                        cellStateTable[i, j].Id == id && id != cellStateTable[i, j - 1].Id)
                     {
-                        _cellStateTable[i, j].PositionX = i;
-                        _cellStateTable[i, j].PositionY = j;
-                        boundaries.Add(_cellStateTable[i, j]);
+                        cellStateTable[i, j].PositionX = i;
+                        cellStateTable[i, j].PositionY = j;
+                        boundaries.Add(cellStateTable[i, j]);
                     }
                 }
             }
             return boundaries;
         }
-        public void GetNotRemovableGrainId(EventArgs e, Cell[,] _cellStateTable, List<int> NotRemovableIds)
+        public void GetNotRemovableGrainId(EventArgs e, Cell[,] cellStateTable, List<int> notRemovableIds)
         {
             var mouseEventArgs = e as MouseEventArgs;
+            if (mouseEventArgs == null) return;
             var x = mouseEventArgs.X;
             var y = mouseEventArgs.Y;
-            NotRemovableIds.Add(_cellStateTable[x, y].Id);
+            notRemovableIds.Add(cellStateTable[x, y].Id);
         }
 
-        public void SetLockOnGrains(int sizeX, int sizeY, Cell[,] _cellStateTable, List<int> NotRemovableIds, string MicrostructureType, Bitmap _bitmap, PictureBox pictureBox1)
+        public void SetLockOnGrains(int sizeX, int sizeY, Cell[,] cellStateTable, List<int> notRemovableIds, string microstructureType, Bitmap bitmap, PictureBox pictureBox1)
         {
             for (int i = 0; i < sizeX; i++)
             {
                 for (int j = 0; j < sizeY; j++)
                 {
-                    if (NotRemovableIds.Contains(_cellStateTable[i, j].Id))
+                    if (notRemovableIds.Contains(cellStateTable[i, j].Id))
                     {
-                        _cellStateTable[i, j].IsLocked = true;
-                        if (MicrostructureType == "DualPhase")
+                        cellStateTable[i, j].IsLocked = true;
+                        if (microstructureType == "DualPhase")
                         {
-                            _cellStateTable[i, j].CellColor = Color.DeepPink;
+                            cellStateTable[i, j].CellColor = Color.DeepPink;
                         }
                     }
                 }
             }
-            _bitmap = _bitmapService.UpdateBitmap(_bitmap, _cellStateTable);
-            pictureBox1.Image = _bitmap;
+            bitmap = _bitmapService.UpdateBitmap(bitmap, cellStateTable);
+            pictureBox1.Image = bitmap;
             pictureBox1.Show();
             pictureBox1.Update();
         }

@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gains
 {
-    public class PropabilityService
+    public class ProbabilityService
     {
         private readonly NeighborhoodService _neighborhoodService;
         private readonly Random _random;
         private readonly object SyncLock;
 
-        public PropabilityService()
+        public ProbabilityService()
         {
             _neighborhoodService = new NeighborhoodService();
             _random = new Random();
