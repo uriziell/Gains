@@ -79,7 +79,7 @@ namespace Gains
                     pictureBox1.Image = _bitmap;
                     pictureBox1.Show();
                     pictureBox1.Update();
-                    _cellStateTable = _gainService.RemoveUpdateLockOnCells(_cellStateTable, sizeX, sizeY);
+                    _cellStateTable = _gainService.RemoveUpdateLockOnCellsPropability(_cellStateTable, sizeX, sizeY);
                     z++;
                 }
             }

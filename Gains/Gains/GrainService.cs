@@ -82,6 +82,7 @@ namespace Gains
                 for (int j = 0; j < y; j++)
                 {
                     cells[i, j].IsUpdated = false;
+                    cells[i, j].IsLockedForPropabilityPurpose = false;
                 }
             }
             return cells;

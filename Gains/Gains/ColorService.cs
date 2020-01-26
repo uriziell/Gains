@@ -23,7 +23,7 @@ namespace Gains
         {
             lock (SyncLock)
             {
-                return Colors(r.Next(9));
+                return Colors(r.Next(22));
             }
         }
 
@@ -45,7 +45,20 @@ namespace Gains
                 case 6: return Color.DarkBlue;
                 case 7: return Color.Coral;
                 case 8: return Color.MediumPurple;
-                case 9: return Color.Tomato;
+                case 9: return Color.MediumAquamarine;
+                case 10: return Color.SandyBrown;
+                case 11: return Color.LightSteelBlue;
+                case 12: return Color.CadetBlue;
+                case 13: return Color.CornflowerBlue;
+                case 14: return Color.Chartreuse;
+                case 15: return Color.DarkGreen;
+                case 16: return Color.Tomato;
+                case 17: return Color.Green;
+                case 18: return Color.PaleGreen;
+                case 19: return Color.Khaki;
+                case 20: return Color.DarkSlateGray;
+                case 21: return Color.DimGray;
+                case 22: return Color.YellowGreen;
                 default: return Color.Red;
             }
         }
